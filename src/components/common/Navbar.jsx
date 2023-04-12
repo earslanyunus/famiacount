@@ -2,8 +2,10 @@ import { useState } from "react";
 import logomark from "../../assets/logomark.svg";
 import Logo from "./Logo";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const MenuButton = ({ onClick }) => {
+
   return (
     <button onClick={onClick}>
       <svg
@@ -38,10 +40,13 @@ const CloseButton = ({ onClick }) => {
 };
 
 export default function Navbar() {
+  const isLogin = useSelector((state)=> state.user.isLogin)
+  console.log(isLogin)
   const [isOpen, setIsOpen] = useState(false);
   const menuHandler = () => {
     setIsOpen(!isOpen);
   };
+  
   return (
     <nav className=" flex-col">
         <div className="  border-b">
