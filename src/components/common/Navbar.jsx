@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logomark from "../../assets/logomark.svg";
 import Logo from "./Logo";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { signOut } from "../../firebase";
 
 const MenuButton = ({ onClick }) => {
 
@@ -41,11 +42,13 @@ const CloseButton = ({ onClick }) => {
 
 export default function Navbar() {
   const isLogin = useSelector((state)=> state.user.isLogin)
-  console.log(isLogin)
+
   const [isOpen, setIsOpen] = useState(false);
   const menuHandler = () => {
     setIsOpen(!isOpen);
   };
+
+
   
   return (
     <nav className=" flex-col">
@@ -59,8 +62,20 @@ export default function Navbar() {
         <ul className="py-6 bg-white shadow-md">
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/'} className={({isActive})=>( isActive?'text-primary-500':'')}>Home</NavLink></li>
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink>Supported Platforms</NavLink></li>
-          <li className="px-4 py-3 text-text-md font-semibold"><NavLink>Find Partners</NavLink></li>
+          <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/findpartners'}>Find Partners</NavLink></li>
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink>My Subscriptions</NavLink></li>
+          {!isLogin && <>
+          <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/login'}>Login</NavLink></li>
+          <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/signup'}>Signup</NavLink></li>
+          </>
+        }
+        {isLogin && <>
+          <li className="px-4 py-3 text-text-md font-semibold"><button onClick={signOut}>Signout</button></li>
+          </>
+        }
+          
+        
+          
         </ul>
       )}
     </nav>
