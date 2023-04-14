@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 export default function ContactForm() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
+   
   }
-  console.log(errors);
+//   console.log(errors);
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
