@@ -15,9 +15,9 @@ export default function CommentSection() {
         id: 1
     },
   {
-    name: "John Doe",
-    text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel tincidunt lacinia, nisl nisl aliquet nisl, nec aliquam nisl nisl eu nisl. Sed euismod, nisl vel tincidunt lacinia, nisl nisl aliquet nisl, nec aliquam nisl nisl eu nisl.',
-    url: "https://plus.unsplash.com/premium_photo-1680615211040-ad309f1ac38e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
+    name: "Jonathan Lee",
+    text:'Finding a friend for my subscriptions is now extremely easy. Thank you Famiacount.',
+    url: "https://images.unsplash.com/photo-1522556189639-b150ed9c4330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
     id: 2
   }])
   return (
