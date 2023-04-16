@@ -83,14 +83,7 @@ export default function MySubs() {
           </div>
         </div>
 
-        <div className="stat">
-          <div className="stat-title text-text-sm font-medium text-gray-600">
-            Number of payment issues
-          </div>
-          <div className="stat-value text-display-md font-semibold text-gray-900">
-            {subscriptions?.length}
-          </div>
-        </div>
+       
       </div>
       <div className="overflow-x-auto w-full">
         <table className="table w-full mt-8">
@@ -98,7 +91,6 @@ export default function MySubs() {
           <thead>
             <tr>
               <th>Subscription Company</th>
-              <th>Payment Status</th>
               <th>Payment Amount</th>
               <th></th>
             </tr>
@@ -125,9 +117,7 @@ export default function MySubs() {
                       </div>
                     </div>
                   </td>
-                  <td>
-                   
-                  </td>
+                 
                   <td>
                     {/* price */}
                     {platforms?.map((platform) => {
