@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import logomark from "../../assets/logomark.svg";
 import Logo from "./Logo";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
