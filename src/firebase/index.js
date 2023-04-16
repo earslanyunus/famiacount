@@ -61,6 +61,16 @@ const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
+    const { displayName, email, photoURL, uid } = user;
+    //create user collection then add user doc to it
+    await setDoc(doc(db, "users", uid), {
+      displayName,
+      email,
+      photoURL,
+      uid,
+    });
+
+    
     return user;
   } catch (e) {
     throw e;

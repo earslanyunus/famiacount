@@ -1,47 +1,82 @@
 import React, { useEffect, useState } from "react";
-import {  acceptSub, findUser, getNotifications, signInWithGoogle } from "../firebase";
+import {
+  acceptSub,
+  findUser,
+  getNotifications,
+  signInWithGoogle,
+} from "../firebase";
 import { useSelector } from "react-redux";
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const user = useSelector((state) => state.user.user);
   useEffect(() => {
     if (user?.uid) {
-        
       getNotifications(user?.uid).then((data) => {
         console.log(data);
         setNotifications(data);
-
-       
-       
-        
       });
     }
   }, [user?.uid]);
   const acceptHandler = (e) => {
-    const data ={
-      ownerId:e.data.ownerId,
-      subscriptionId:e.data.subscriptionId,
-      senderId:e.data.sendUserInfo.uid,
-      id:e.id
-    }
-    console.log(data);
-    acceptSub(data)
+    const data = {
+      ownerId: e.data.ownerId,
+      subscriptionId: e.data.subscriptionId,
+      senderId: e.data.sendUserInfo.uid,
+      id: e.id,
+    };
     
-    
-  }
+    acceptSub(data);
+  };
   return (
-    <div>
-      {notifications?.map((item) => {
-        return (
-          <div key={item.data.id}>
-            <p>{item.data?.text}</p>
-            <p>{item.data?.id}</p>
-            if (item.data?.isRequest) {
-              <button onClick={() => acceptHandler(item)}>Kabul Et</button>
-            }
-          </div>
-        );
-      })}
+    <div className="container">
+      <div className="overflow-x-auto w-full">
+        <table className="table w-full">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>Notification</th>
+
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+            {notifications.map((notification) => {
+              return (
+                <tr key={notification.id}>
+                  <td>
+                    <div className="flex items-center space-x-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle w-12 h-12">
+                          <img
+                            src={notification.data.sendUserInfo.photoURL}
+                            alt="Avatar Tailwind CSS Component"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">
+                          {notification.data.text}
+                        </div>
+                        <div className="text-sm opacity-50">
+                          {notification.data.sendUserInfo.displayName}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  { 
+                  notification.data.isRequest === true && (
+                  <th>
+                    <button onClick={()=>acceptHandler(notification)} className="btn btn-primary mr-4 btn-xs">Accept</button>
+                    <button className="btn btn-outline btn-xs">Cancel</button>
+                  </th>)
+                  }
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
