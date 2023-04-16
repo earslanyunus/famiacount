@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   createSubscriptionOwner,
   getPlatformsInfo,
@@ -9,8 +11,6 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function FindPartner() {
@@ -21,29 +21,53 @@ export default function FindPartner() {
   const screencount = [];
   const [subscriptionData, setSubscriptionData] = useState([]);
 
-
+  const formToast = (message) => {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    })      
+  }
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    if(user){
     const veri = {
       platform: data.Platform,
       plan: data.Plan,
-      activeUser: data.activeUser,
+      initialUser: data.activeUser,
+      // userCount:initialUser,
       paymentMonth: data.paymentMonth,
       accountEmail: data.accountEmail,
       accountPassword: data.accountPassword,
       owner: user.uid,
       createdTime: new Date().toISOString(),
     };
+    veri.userCount = veri.initialUser;
     createSubscriptionOwner(veri);
-  };
+    formToast("Subscription added successfully")
+    
+  }
+  else{
+    toast.error("You need to login to join a subscription", {
+      theme: "colored",
+    });
+
+  }
+  }
+
+    
   // console.log(errors);
 
   useEffect(() => {
-
     getPlatformsInfo().then((data) => {
       setPlatforms(data);
     });
@@ -62,8 +86,7 @@ export default function FindPartner() {
     setSelectedPlatform(e.target.value);
   };
   const joinHandler = (e) => {
-
-    if(user){
+    if (user) {
       const data = {
         subscriptionId: e.id,
         ownerId: e.owner,
@@ -72,30 +95,30 @@ export default function FindPartner() {
         isRead: false,
         isVerified: false,
         isRequest: true,
-      };
+      }
       sendJoinRequest(data);
-      toast.success('Request sent');
+      
+     
+    
+
+    } else {
+      toast.error("You need to login to join a subscription", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     }
-    else{
-      toast.error('You need to login to join a subscription');
-    }
-  
   };
   return (
-    <div className="min-w-[100vw]">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+    <>
       <ToastContainer />
+    <div className="max-w-[100vw] min-h-[100vh] flex flex-col justify-between">
+      <div>
       <Navbar />
       <div className="container py-6">
         <label htmlFor="my-modal-6" className="btn">
@@ -111,7 +134,8 @@ export default function FindPartner() {
             >
               ✕
             </label>
-
+            {
+              user &&(
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-4"
@@ -177,86 +201,99 @@ export default function FindPartner() {
               <button type="submit" className="btn btn-primary w-min">
                 Add
               </button>
-            </form>
+            </form>)
+            }
+            {!user && (
+              <p className=" text-red-500">You need to login to join a subscription</p>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="container flex justify-between mt-6 flex-wrap">
+      <div className="container flex justify-between mt-6 gap-4 flex-wrap">
         {subscriptionData?.map((item) => {
-          if(item.owner !== user?.uid){
-          return (
-            <div
-              key={item.id}
-              className="card w-1/3 min-w-[24rem]  bg-gray-50 shadow-xl"
-            >
-              <div className="card-body">
-                <h2 className="card-title">{item.platform}</h2>
-                <span className="badge">
-                  {platforms.map((platform, i) => {
-                    if (platform.name === item.platform) {
-                      return (
-                        <p key={item?.id}>
-                          {platform?.plans[0]?.userCount}-Person Sub
-                        </p>
-                      );
-                    }
-                  })}
-                </span>
-                <span className="badge">
-                  {platforms.map((platform) => {
-                    if (platform.name === item.platform) {
-                      return (
-                        <p key={item?.id}>
-                          Space for{" "}
-                          {platform?.plans[0]?.userCount - item.activeUser <= 0
-                            ? "Yer Yok"
-                            : platform?.plans[0]?.userCount - item.activeUser}
-                        </p>
-                      );
-                    }
-                  })}
-                </span>
-                <span className="badge">
-                  {platforms.map((platform) => {
-                    if (platform.name === item.platform) {
-                      return (
-                        <p key={item?.id}>{item?.paymentMonth}-Month Payment</p>
-                      );
-                    }
-                  })}
-                </span>
-                {/* calculate price */}
-                <span className="badge py-2.5">
-                  {platforms.map((platform) => {
-                    if (platform.name === item.platform) {
-                      return (
-                        <p key={item?.id}>
-                          {Number(platform?.plans[0]?.price) /
-                            Number(
-                              platform?.plans[0]?.userCount - item.activeUser
-                            )}
-                          $ per person
-                        </p>
-                      );
-                    }
-                  })}
-                </span>
+          if (item.owner !== user?.uid) {
+            return (
+              <div
+                key={item.id}
+                className="card w-1/4 min-w-[24rem]  bg-gray-50 shadow-xl"
+              >
+                <div className="card-body">
+                  <h2 className="card-title">{item.platform}</h2>
+                  <span className="badge">
+                    {platforms.map((platform, i) => {
+                      if (platform.name === item.platform) {
+                        return (
+                          <p key={item?.id}>
+                            {platform?.plans[0]?.userCount}-Person Sub
+                          </p>
+                        );
+                      }
+                    })}
+                  </span>
+                  <span className="badge">
+                    {platforms.map((platform) => {
+                      if (platform.name === item.platform) {
+                        return (
+                          <p key={item?.id}>
+                            Space for{" "}
+                            {platform?.plans[0]?.userCount - item.initialUser <=
+                            0
+                              ? "Yer Yok"
+                              : platform?.plans[0]?.userCount - item.initialUser}
+                          </p>
+                        );
+                      }
+                    })}
+                  </span>
+                  <span className="badge">
+                    {platforms.map((platform) => {
+                      if (platform.name === item.platform) {
+                        return (
+                          <p key={item?.id}>
+                            {item?.paymentMonth}-Month Payment
+                          </p>
+                        );
+                      }
+                    })}
+                  </span>
+                  {/* calculate price */}
+                  <span className="badge py-2.5">
+                    {platforms.map((platform) => {
+                      if (platform.name === item.platform) {
+                        return (
+                          <p key={item?.id}>
+                            {Number(platform?.plans[0]?.price) /
+                              Number(
+                                platform?.plans[0]?.userCount - item.initialUser
+                              )}
+                            $ per person
+                          </p>
+                        );
+                      }
+                    })}
+                  </span>
 
-                <div className="card-actions justify-center mt-4">
-                  {/* <button onClick={} className="btn btn-primary ">Join Now</button> */}
-                  <button onClick={() => joinHandler(item)} className="btn btn-primary"> Join Now</button>
-
-                  
-                                  </div>
+                  <div className="card-actions justify-center mt-4">
+                    {/* <button onClick={} className="btn btn-primary ">Join Now</button> */}
+                    <button
+                      onClick={() => joinHandler(item)}
+                      className="btn btn-primary"
+                    >
+                      {" "}
+                      Join Now
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        }
+            );
+          }
         })}
+      </div>
       </div>
 
       <Footer />
     </div>
+    </>
   );
 }

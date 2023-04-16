@@ -24,6 +24,8 @@ export default function ProfileLayout() {
   };
   return (
     <>
+    <div className="min-h-screen flex flex-col justify-between">
+    <div>
       <Navbar />
       <div className="tabs-boxed bg-transparent text-center">
         <NavLink to={'subs'} onClick={ ()=>activeHandler(1)} className={`tab tab-lg ${activeTab==1? 'tab-active' :''}`}>Overview</NavLink>
@@ -31,7 +33,9 @@ export default function ProfileLayout() {
       </div>
 
       <Outlet />
+      </div>
       <Footer />
+      </div>
     </>
   );
 }

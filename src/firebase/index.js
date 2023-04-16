@@ -92,7 +92,7 @@ onAuthStateChanged(auth, (user) => {
     store.dispatch(setLogin(true));
     store.dispatch(setUser({ displayName, email, photoURL, uid }));
   } else {
-    console.log("user is signed out");
+    
   }
 });
 
@@ -117,6 +117,7 @@ const createSubscriptionOwner = async (data) => {
       data
     );
     await updateDoc(doc(db, "subscriptions", subscriptionOwnerRef.id), {
+  
       id: subscriptionOwnerRef.id,
     });
 
@@ -147,9 +148,16 @@ const acceptSub = async (data) => {
         const userRef = doc(db, "users", data.senderId);
         const userSubscriptionsRef = collection(userRef, "subscriptions");
         await setDoc(doc(userSubscriptionsRef, data.subscriptionId), {
+          
           id: data.subscriptionId
         });
         const subscriptionRef = doc(db, "subscriptions", data.subscriptionId);
+        const initialUserData = await getDoc(subscriptionRef,);
+        const initialUser = initialUserData.data().initialUser;
+        await updateDoc(subscriptionRef, {
+          userCount: initialUser+1
+        });
+    
         const subscriptionUsersRef = collection(subscriptionRef, "users");
         await setDoc(doc(subscriptionUsersRef, data.senderId), {
           isPayed: false,
@@ -276,7 +284,7 @@ const getSubscriptionUsers = async (id) => {
 }
 const confirmPayment = async (data) => {
   try {
-    console.log('confirm calisti');
+  
     const subscriptionRef = doc(db, "subscriptions", data.subscriptionId);
     const subscriptionUsersRef = collection(subscriptionRef, "users", )
     const userRef = doc(subscriptionUsersRef, data.userId)
@@ -312,6 +320,8 @@ const confirmPayment = async (data) => {
       throw e;
     }
   };
+
+
 
 
     

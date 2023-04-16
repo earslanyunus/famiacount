@@ -9,7 +9,7 @@ export default function Signup() {
   const user = useSelector(state => state.user)
   useEffect(()=>{
     if(user.user){
-      console.log(user);
+   
       navigate('/')
     }
   },[user])
