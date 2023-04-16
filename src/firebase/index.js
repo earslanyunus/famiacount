@@ -16,6 +16,7 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import store from "../redux/store";
@@ -62,7 +63,6 @@ const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     const { displayName, email, photoURL, uid } = user;
-    //create user collection then add user doc to it
     await setDoc(doc(db, "users", uid), {
       displayName,
       email,
@@ -151,10 +151,11 @@ const acceptSub = async (data) => {
         });
         const subscriptionRef = doc(db, "subscriptions", data.subscriptionId);
         const subscriptionUsersRef = collection(subscriptionRef, "users");
-        await setDoc(doc(subscriptionUsersRef, data.senderId), {});
-        await updateDoc(doc(db, "users", data.ownerId, "notifications", data.id,), {
-         "data.isVerified": true
+        await setDoc(doc(subscriptionUsersRef, data.senderId), {
+          isPayed: false,
+          user: data.senderId,
         });
+        await deleteDoc(doc(db, "users", data.ownerId, "notifications", data.id));
     } catch (e) {
         throw e;
     }
@@ -201,7 +202,8 @@ const findUser = async (uid) => {
   } catch (e) {
     throw e;
   }
-};
+}
+
 const getSubscriptionFromUser = async (uid) => {
   try {
     const userRef = doc(db, "users", uid);
@@ -286,7 +288,32 @@ const confirmPayment = async (data) => {
     throw e;
   }
 }
-    
+    const deleteNotification = async (id) => {
+
+
+    try {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      const userNotificationsRef = collection(userRef, "notifications");
+      await deleteDoc(doc(userNotificationsRef, id));
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const deleteUserFromSubscription = async (data) => {
+    try {
+      const subscriptionRef = doc(db, "subscriptions", data.subscriptionId);
+      const subscriptionUsersRef = collection(subscriptionRef, "users");
+      await deleteDoc(doc(subscriptionUsersRef, data.userId));
+      const userRef = doc(db, "users", data.userId);
+      const userSubscriptionsRef = collection(userRef, "subscriptions");
+      await deleteDoc(doc(userSubscriptionsRef, data.subscriptionId));
+    } catch (e) {
+      throw e;
+    }
+  };
+
+
     
 export {
   signupWithGoogle,
@@ -302,5 +329,7 @@ export {
   getSubscriptionFromUser,
   getSubscriptionWithId,
   getSubscriptionUsers,
-  confirmPayment
+  confirmPayment,
+  deleteNotification,
+  deleteUserFromSubscription
 };

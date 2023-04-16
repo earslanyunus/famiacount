@@ -75,7 +75,7 @@ export default function FeaturesSection() {
           packages with multiple people to save money.
         </p>
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 md:flex-row">
         <div>
           <Features
             icon={<PartnerIcon />}

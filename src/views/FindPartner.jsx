@@ -9,6 +9,9 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function FindPartner() {
   const user = useSelector((state) => state.user.user);
@@ -17,6 +20,7 @@ export default function FindPartner() {
   const [screenCount, setScreenCount] = useState([]);
   const screencount = [];
   const [subscriptionData, setSubscriptionData] = useState([]);
+
 
   const {
     register,
@@ -39,6 +43,7 @@ export default function FindPartner() {
   // console.log(errors);
 
   useEffect(() => {
+
     getPlatformsInfo().then((data) => {
       setPlatforms(data);
     });
@@ -57,20 +62,40 @@ export default function FindPartner() {
     setSelectedPlatform(e.target.value);
   };
   const joinHandler = (e) => {
-    console.log(e);
-    const data = {
-      subscriptionId: e.id,
-      ownerId: e.owner,
-      sendUserInfo: user,
-      text: "I want to join your subscription",
-      isRead: false,
-      isVerified: false,
-      isRequest: true,
-    };
-    sendJoinRequest(data);
+
+    if(user){
+      const data = {
+        subscriptionId: e.id,
+        ownerId: e.owner,
+        sendUserInfo: user,
+        text: "I want to join your subscription",
+        isRead: false,
+        isVerified: false,
+        isRequest: true,
+      };
+      sendJoinRequest(data);
+      toast.success('Request sent');
+    }
+    else{
+      toast.error('You need to login to join a subscription');
+    }
+  
   };
   return (
-    <>
+    <div className="min-w-[100vw]">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
       <Navbar />
       <div className="container py-6">
         <label htmlFor="my-modal-6" className="btn">
@@ -149,7 +174,9 @@ export default function FindPartner() {
                 placeholder="Account Password"
                 {...register("accountPassword", { required: true })}
               />
-              <button type="submit" className="btn btn-primary w-min">Add</button>
+              <button type="submit" className="btn btn-primary w-min">
+                Add
+              </button>
             </form>
           </div>
         </div>
@@ -157,6 +184,7 @@ export default function FindPartner() {
 
       <div className="container flex justify-between mt-6 flex-wrap">
         {subscriptionData?.map((item) => {
+          if(item.owner !== user?.uid){
           return (
             <div
               key={item.id}
@@ -216,15 +244,19 @@ export default function FindPartner() {
                 </span>
 
                 <div className="card-actions justify-center mt-4">
-                  <button className="btn btn-primary ">Join Now</button>
-                </div>
+                  {/* <button onClick={} className="btn btn-primary ">Join Now</button> */}
+                  <button onClick={() => joinHandler(item)} className="btn btn-primary"> Join Now</button>
+
+                  
+                                  </div>
               </div>
             </div>
           );
+        }
         })}
       </div>
 
       <Footer />
-    </>
+    </div>
   );
 }

@@ -94,7 +94,6 @@ export default function MySubs() {
               <th>Subscription Company</th>
               <th>Payment Status</th>
               <th>Payment Amount</th>
-              <th>Users</th>
               <th></th>
             </tr>
           </thead>
@@ -117,11 +116,7 @@ export default function MySubs() {
                     </div>
                   </td>
                   <td>
-                    Zemlak, Daniel and Leannon
-                    <br />
-                    <span className="badge badge-ghost badge-sm">
-                      Desktop Support Technician
-                    </span>
+                   
                   </td>
                   <td>
                     {/* price */}
@@ -141,9 +136,7 @@ export default function MySubs() {
                       return null;
                     })}
                   </td>
-                  <td>
-                    {/* users */}
-                  </td>
+                 
                   <th>
                     <NavLink to={`/my/sub/detail/${item[0].id}`} className="btn btn-ghost btn-xs">details</NavLink>
                   </th>

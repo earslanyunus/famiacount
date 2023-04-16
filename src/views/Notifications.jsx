@@ -4,6 +4,7 @@ import {
   findUser,
   getNotifications,
   signInWithGoogle,
+  deleteNotification
 } from "../firebase";
 import { useSelector } from "react-redux";
 export default function Notifications() {
@@ -26,7 +27,14 @@ export default function Notifications() {
     };
     
     acceptSub(data);
+    const filteredList = notifications.filter((item) => item.id !== e.id);
+    setNotifications(filteredList);
   };
+  const cancelHandler = (e) => {
+    deleteNotification(e.id)
+    const filteredList = notifications.filter((item) => item.id !== e.id);
+    setNotifications(filteredList);
+  }
   return (
     <div className="container">
       <div className="overflow-x-auto w-full">
@@ -68,7 +76,7 @@ export default function Notifications() {
                   notification.data.isRequest === true && (
                   <th>
                     <button onClick={()=>acceptHandler(notification)} className="btn btn-primary mr-4 btn-xs">Accept</button>
-                    <button className="btn btn-outline btn-xs">Cancel</button>
+                    <button onClick={()=>cancelHandler(notification)} className="btn btn-outline btn-xs">Cancel</button>
                   </th>)
                   }
                 </tr>

@@ -3,6 +3,7 @@ import netflix from "../../assets/netflixIcon.svg";
 import youtube from "../../assets/youtubeIcon.svg";
 import google from "../../assets/googleIcon.svg";
 import spotify from "../../assets/spotifyIcon.svg";
+import { NavLink } from "react-router-dom";
 
 
 
@@ -18,13 +19,13 @@ export default function SupportedSection() {
         We add platforms that allow family or group subscriptions to our list,
         as we don't want your account to be closed :)
       </p>
-      <div className="flex w-full justify-between mt-12 items-center">
+      <div className="flex w-full justify-between mt-12 items-center md:justify-center md:gap-8">
         <PlatformsIcon image={netflix} />
         <PlatformsIcon image={youtube} />
         <PlatformsIcon image={google} />
         <PlatformsIcon image={spotify} />
       </div>
-      <button type="button" className="btn-primary-lg mt-12">All Platforms</button>
+      <NavLink to={'/supported-platforms'}  className="btn-primary-lg mt-12">All Platforms</NavLink>
    
     </div>
   );
