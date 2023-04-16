@@ -1,4 +1,4 @@
-import logomark from "../../assets/logomark.svg";
+import logomark from "../../assets/Logomark.svg";
 
 export default function Logo() {
   return (
