@@ -25,7 +25,7 @@ export default function SubDetail() {
       const users = [];
 
       data.forEach((doc) => {
-        console.log("doc", doc);
+        
         findUser(doc.user).then((data) => {
           users.push(data);
         });
@@ -35,7 +35,7 @@ export default function SubDetail() {
   }, []);
   useEffect(() => {
     if (sub.length > 0) {
-      console.log("calisti");
+    
       getPlatformsInfo().then((data) => {
         data.forEach((item) => {
           if (item.name === sub[0]?.platform) {
@@ -90,7 +90,6 @@ export default function SubDetail() {
         <div className="card-body items-center text-center">
           <h2 className="card-title">Users</h2>
           {users.map((item) => {
-            console.log("item", item);
             const [user] = sub[2].filter((user) => user.user === item.uid);
 
             return (

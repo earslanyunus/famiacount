@@ -13,7 +13,7 @@ export default function Notifications() {
   useEffect(() => {
     if (user?.uid) {
       getNotifications(user?.uid).then((data) => {
-        console.log(data);
+  
         setNotifications(data);
       });
     }
