@@ -1,5 +1,33 @@
+import daisyui from 'daisyui'
+
 /** @type {import('tailwindcss').Config} */
 export default {
+    daisyui: {
+      themes: [
+        {
+          mytheme: {
+          
+ "primary": "#eaac8b",
+          
+ "secondary": "#f5d6c5",
+          
+ "accent": "#37CDBE",
+          
+ "neutral": "#3D4451",
+          
+ "base-100": "#FFFFFF",
+          
+ "info": "#3ABFF8",
+          
+ "success": "#36D399",
+          
+ "warning": "#FBBD23",
+          
+ "error": "#F87272",
+          },
+        },
+      ],
+    },
   content: [
     './src/**/*.html',
     './src/**/*.{js,jsx,ts,tsx}',
@@ -68,7 +96,7 @@ export default {
         }
     },
   },
-  plugins: [function({addComponents,theme}){
+  plugins: [require("daisyui"),function({addComponents,theme}){
    
     addComponents({
       // // px-5 py-3 bg-primary-600 text-text-md font-semibold text-white rounded-lg hover:bg-primary-700

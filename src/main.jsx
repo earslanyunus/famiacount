@@ -11,6 +11,7 @@ import  store  from './redux/store'
 import { Provider } from 'react-redux'
 import Notifications from './views/Notifications'
 import MySubs from './views/MySubs'
+import SubDetail from './views/SubDetail'
 
 const router = createBrowserRouter([
   { path: '/', element: <Homepage /> },
@@ -19,7 +20,8 @@ const router = createBrowserRouter([
   {path:'/findpartners', element: <FindPartner/>},
   {path:'my', element: <ProfileLayout/>, children:[
     {path:'notifications', element: <Notifications/>},
-    {path:'subs',element: <MySubs/>}
+    {path:'subs',element: <MySubs/>},
+    {path:'sub/detail/:id', element: <SubDetail/>}
   ]},
   
 ])

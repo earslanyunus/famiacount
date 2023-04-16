@@ -208,28 +208,75 @@ const getSubscriptionFromUser = async (uid) => {
 };
 const getSubscriptionWithId = async (id) => {
   try {
-    const data = []
     const subscriptionRef = doc(db, "subscriptions", id);
     const subscriptionDoc = await getDoc(subscriptionRef);
-    if (subscriptionDoc.exists()) {
-      data.push(subscriptionDoc.data());
-      const subscriptionUsersRef = collection(subscriptionRef, "users");
-      const usersRef = await getDocs(subscriptionUsersRef);
+    // get users
+    const subscriptionUsersRef = collection(subscriptionRef, "users");
+    const usersRef = await getDocs(subscriptionUsersRef);
+    
+    const users = [];
+    const usersDetail =[]
+
+     if (subscriptionDoc.exists()) {
       usersRef.forEach((doc) => {
-        data.push(doc.data());
-      });
+         users.push(doc.data());
+
+       });
+      if(users.length >0){
+        users.forEach(async (user) => {
+          
+          
+          const userRef = doc(db, "users", user.user);
+          const userDoc = await getDoc(userRef);
+          usersDetail.push(userDoc.data());
+
+          
+        });
+        
+      }
+      
+         
+
+
+      const data = [subscriptionDoc.data(), usersDetail,users];
       return data;
-      
-      
     } else {
       return null;
     }
+  } catch (e) {
+    throw e;
+  }
+};
 
+const getSubscriptionUsers = async (id) => {
+  try {
+    const subscriptionRef = doc(db, "subscriptions", id);
+    const subscriptionUsersRef = collection(subscriptionRef, "users");
+    const usersRef = await getDocs(subscriptionUsersRef);
+    const users = [];
+    usersRef.forEach((doc) => {
+      users.push(doc.data());
+    });
+    return users;
   } catch (e) {
     throw e;
   }
 }
-  
+const confirmPayment = async (data) => {
+  try {
+    console.log('confirm calisti');
+    const subscriptionRef = doc(db, "subscriptions", data.subscriptionId);
+    const subscriptionUsersRef = collection(subscriptionRef, "users", )
+    const userRef = doc(subscriptionUsersRef, data.userId)
+    await updateDoc(userRef, {
+      isPayed: true,
+      date: new Date().toISOString()
+    });
+  } catch (e) {
+    throw e;
+  }
+}
+    
     
 export {
   signupWithGoogle,
@@ -243,5 +290,7 @@ export {
   getNotifications,
   findUser,
   getSubscriptionFromUser,
-  getSubscriptionWithId
+  getSubscriptionWithId,
+  getSubscriptionUsers,
+  confirmPayment
 };

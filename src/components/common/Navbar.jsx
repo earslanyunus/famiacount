@@ -63,7 +63,7 @@ export default function Navbar() {
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/'} className={({isActive})=>( isActive?'text-primary-500':'')}>Home</NavLink></li>
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink>Supported Platforms</NavLink></li>
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/findpartners'}>Find Partners</NavLink></li>
-          <li className="px-4 py-3 text-text-md font-semibold"><NavLink>My Subscriptions</NavLink></li>
+          <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/my/subs'}>My Subscriptions</NavLink></li>
           {!isLogin && <>
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/login'}>Login</NavLink></li>
           <li className="px-4 py-3 text-text-md font-semibold"><NavLink to={'/signup'}>Signup</NavLink></li>
